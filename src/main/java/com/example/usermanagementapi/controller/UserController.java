@@ -27,7 +27,7 @@ public class UserController {
         List<User> savedUser = userRepository.saveAll(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
-    //hi
+    // updated
     @GetMapping("/page")
     public Page<User> getUsers(Pageable pageable){
        return userRepository.findAll((org.springframework.data.domain.Pageable) pageable);
