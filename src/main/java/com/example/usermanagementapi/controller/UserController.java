@@ -4,9 +4,16 @@ import com.example.usermanagementapi.model.User;
 import com.example.usermanagementapi.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +23,14 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        User savedUser = userRepository.save(user);
+    public ResponseEntity<List<User>> createUser(@Valid @RequestBody List<User> user){
+        List<User> savedUser = userRepository.saveAll(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
+
+    @GetMapping("/page")
+    public Page<User> getUsers(Pageable pageable){
+       return userRepository.findAll((org.springframework.data.domain.Pageable) pageable);
     }
 
     @GetMapping
@@ -55,5 +67,3 @@ public class UserController {
         }
     }
 }
-
-
