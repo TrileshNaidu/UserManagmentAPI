@@ -9,17 +9,20 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
 @Table(name="users")
 @Data
-@NoArgsConstructor
+@NoArgsConstructor//default constructor
 @RequiredArgsConstructor
 public class User {
 
@@ -35,7 +38,17 @@ public class User {
     @NonNull
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
+    @Column(unique = true)
     private String email;
+
+    //@Valid
+    @NotBlank(message = "Password is required")
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
 
     @Column(name="created_at",updatable = false)
     @CreationTimestamp
